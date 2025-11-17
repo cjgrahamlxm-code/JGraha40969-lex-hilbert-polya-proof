@@ -1,5 +1,6 @@
 # JGraha40969-lex-hilbert-polya-proof
 LexGPT-Hilbert-Polya-Proof
+
 # Lex Hilbert–Pólya Operator — 1,000,000 Zeros
 H = diag(t) where t_n = Im(ζ⁻¹(n))
 - lex_t_1M.npy: 1M real eigenvalues
