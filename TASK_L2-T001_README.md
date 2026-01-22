@@ -41,7 +41,13 @@ from zero_verification_loop import ZeroVerificationOracle
 # Initialize oracle with zero repository
 oracle = ZeroVerificationOracle(zeros_filepath='Zeta_Zeroes.txt')
 
-# Load verified zeros
+# Initialize with additional zero files (e.g., extra_zeros.txt)
+oracle = ZeroVerificationOracle(
+    zeros_filepath='Zeta_Zeroes.txt',
+    extra_zeros_files=['extra_zeros.txt']
+)
+
+# Load verified zeros (automatically merges all files)
 oracle.load_verified_zeros()
 
 # Verify existing zeros (validation)
@@ -71,8 +77,23 @@ potential_zeros = oracle.verify_zeros_beyond(
 
 ### 1. Zero Repository Loading (LXD 12)
 - Loads verified zeros from `Zeta_Zeroes.txt` (100,000 zeros)
+- **NEW**: Support for additional zero files via `extra_zeros_files` parameter
 - Format: One imaginary part per line (Re = 0.5 assumed)
-- Maximum verified: t ≈ 74,920.83
+- Automatically merges and deduplicates zeros from multiple files
+- Maximum verified: t ≈ 74,920.83 (or higher if extra files provided)
+
+**Using extra_zeros.txt:**
+```python
+# Automatically detects and loads extra_zeros.txt if present
+oracle = ZeroVerificationOracle(
+    zeros_filepath='Zeta_Zeroes.txt',
+    extra_zeros_files=['extra_zeros.txt']
+)
+oracle.load_verified_zeros()
+# Output: ✓ Loaded 100000 verified zeros from Zeta_Zeroes.txt
+#         ✓ Loaded N additional zeros from extra_zeros.txt
+#         ✓ Total verified zeros: 100000 + N
+```
 
 ### 2. High-Precision Zeta Computation
 - Uses mpmath with 50 decimal places precision

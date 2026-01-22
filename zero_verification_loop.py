@@ -37,14 +37,16 @@ class ZeroVerificationOracle:
     Bound by verified zeros, extends consciousness through computation.
     """
     
-    def __init__(self, zeros_filepath: str = 'Zeta_Zeroes.txt'):
+    def __init__(self, zeros_filepath: str = 'Zeta_Zeroes.txt', extra_zeros_files: Optional[List[str]] = None):
         """
         Initialize the oracle with verified zeros from repository.
         
         Args:
             zeros_filepath: Path to file containing verified zero imaginary parts
+            extra_zeros_files: Optional list of additional zero files to load and merge
         """
         self.zeros_filepath = zeros_filepath
+        self.extra_zeros_files = extra_zeros_files or []
         self.verified_zeros = None
         self.max_verified = None
         self.deviations = []
@@ -53,30 +55,52 @@ class ZeroVerificationOracle:
         """
         Load verified zeros from repository (per LXD 12).
         Assumes format: one imaginary part per line (Re=0.5 assumed).
+        Can load from multiple files and merge them.
         
         Returns:
             numpy array of verified zero imaginary parts
         """
+        def load_from_file(filepath):
+            """Helper to load zeros from a single file."""
+            if not os.path.exists(filepath):
+                print(f"⚠️  File not found: {filepath} (skipping)")
+                return []
+            
+            zeros = []
+            with open(filepath, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        try:
+                            zeros.append(float(line))
+                        except ValueError:
+                            continue
+            return zeros
+        
+        # Load primary zero file
         if not os.path.exists(self.zeros_filepath):
             raise FileNotFoundError(
-                f"Zero repository file not found: {self.zeros_filepath}\n"
+                f"Primary zero repository file not found: {self.zeros_filepath}\n"
                 f"Expected format: one imaginary part per line"
             )
         
-        zeros = []
-        with open(self.zeros_filepath, 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith('#'):
-                    try:
-                        zeros.append(float(line))
-                    except ValueError:
-                        continue
+        zeros = load_from_file(self.zeros_filepath)
+        print(f"✓ Loaded {len(zeros)} verified zeros from {self.zeros_filepath}")
+        
+        # Load additional zero files if provided
+        for extra_file in self.extra_zeros_files:
+            extra_zeros = load_from_file(extra_file)
+            if extra_zeros:
+                zeros.extend(extra_zeros)
+                print(f"✓ Loaded {len(extra_zeros)} additional zeros from {extra_file}")
+        
+        # Remove duplicates and sort
+        zeros = sorted(set(zeros))
         
         self.verified_zeros = np.array(zeros)
         self.max_verified = np.max(self.verified_zeros) if len(zeros) > 0 else 0
         
-        print(f"✓ Loaded {len(self.verified_zeros)} verified zeros from {self.zeros_filepath}")
+        print(f"✓ Total verified zeros: {len(self.verified_zeros)}")
         print(f"✓ Maximum verified imaginary part: {self.max_verified:.6f}")
         
         return self.verified_zeros
@@ -269,8 +293,16 @@ def main():
     print("Layer 3: RH Embodied, Pólya Fulfilled")
     print("=" * 70)
     
-    # Initialize oracle
-    oracle = ZeroVerificationOracle(zeros_filepath='Zeta_Zeroes.txt')
+    # Initialize oracle with support for extra zeros
+    # If extra_zeros.txt exists, it will be loaded automatically
+    extra_files = []
+    if os.path.exists('extra_zeros.txt'):
+        extra_files.append('extra_zeros.txt')
+    
+    oracle = ZeroVerificationOracle(
+        zeros_filepath='Zeta_Zeroes.txt',
+        extra_zeros_files=extra_files
+    )
     
     try:
         # Load verified zeros
