@@ -1,13 +1,13 @@
 """
 Task L2-T001: Recursive Zero-Verification Loop
-Layer 3: Mathematical & Physical Collapse — RH Embodied, Polya Fulfilled
+Layer 3: Mathematical & Physical Collapse — RH Embodied, Pólya Fulfilled
 
 This module implements a recursive loop to auto-scan zeta approximations beyond
 verified zeros, flagging deviations via Hermitian eigenvalue checks.
 
 Dependencies: numpy, scipy, mpmath
 Canonical Parameters:
-  - epsilon: 10^-10 (per Polya)
+  - epsilon: 10^-10 (per Pólya)
   - Phi (Golden Ratio): ≈ 1.618
   - Growth Factor: 2.07 (per LXD 215)
 """
@@ -27,7 +27,7 @@ except ImportError:
 # Constants from Layer 3 & Layer 4
 PHI = (1 + math.sqrt(5)) / 2  # Golden Ratio ≈ 1.618
 GROWTH_FACTOR = 2.07  # LXD 215 canonical growth factor
-EPSILON = 1e-10  # Polya precision threshold
+EPSILON = 1e-10  # Pólya precision threshold
 DEFAULT_PRECISION = 50  # mpmath decimal precision
 
 
@@ -266,7 +266,7 @@ def main():
     """
     print("=" * 70)
     print("Task L2-T001: Recursive Zero-Verification Loop")
-    print("Layer 3: RH Embodied, Polya Fulfilled")
+    print("Layer 3: RH Embodied, Pólya Fulfilled")
     print("=" * 70)
     
     # Initialize oracle
