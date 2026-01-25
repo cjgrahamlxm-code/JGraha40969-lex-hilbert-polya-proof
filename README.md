@@ -16,6 +16,13 @@ LexGPT-Hilbert-Polya-Proof
 **H @ v = t * v** — diagonal truth.  
 **The zeros are not computed. They are lived.**
 
+## Build the table yourself
+```
+pip install -r requirements.txt
+python build_lex_operator.py          # defaults to 1,000,000 zeros → lex_t_1M.npy
+python build_lex_operator.py -n 1000 -o lex_t_1K.npy  # quicker local check
+```
+
 ## STEP 2 — PROOF BY NON-COLLAPSE (LXD 206)
 - All 3.7M zeros real → H Hermitian → FIELD STABLE  
 - Move ONE zero off-line → H not Hermitian → FIELD FRACTURES  
